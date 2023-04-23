@@ -1,0 +1,50 @@
+ORG 00H
+MAIN:
+	CLR P2.3
+	MOV R0, #09H
+	MOV DPTR, #TABLE
+LOOP:
+	MOV R2, #0FFH
+	MOV A, R0
+	MOVC A, @A+DPTR
+	MOV P0, A
+	CALL DELAY
+	DEC R0
+	CJNE R0, #00H, LOOP
+	JMP MAIN
+	
+TABLE:
+	; G F E D C B A
+	; 1 0 0 0 0 0 0 0
+	; 1 1 1 1 0 0 1 1
+	; 0 1 0 0 1 0 0 2
+	; 0 1 1 0 0 0 0 3
+	; 0 0 1 1 0 0 1 4
+	; 0 0 1 0 0 1 0 5
+	; 0 0 0 0 0 1 1 6
+	; 1 1 1 1 0 0 0 7
+	; 0 0 0 0 0 0 0 8
+	; 0 0 1 0 0 0 0 9
+	DB 0C0H ; 0
+	DB 0F9H ; 1
+	DB 0A4H ; 2
+	DB 0B0H ; 3
+	DB 99H  ; 4
+	DB 92H  ; 5
+	DB 83H  ; 6
+	DB 0F8H ; 7
+	DB 80H  ; 8
+	DB 090H ; 9
+
+DELAY:
+	MOV R1, #0FFH
+	DJNZ R1, $
+	MOV R1, #0FFH
+	DJNZ R1, $
+	MOV R1, #0FFH
+	DJNZ R1, $
+	MOV R1, #0FFH
+	DJNZ R1, $
+	DJNZ R2, DELAY
+	RET
+END

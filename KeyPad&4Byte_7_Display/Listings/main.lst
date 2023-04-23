@@ -1,0 +1,269 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 04/19/2023 21:21:04 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000 757FC0            2     MOV 7FH, #0C0H ;7-Display 3
+0003 757EC0            3     MOV 7EH, #0C0H ;7-Display 2
+0006 757DC0            4     MOV 7DH, #0C0H ;7-Display 1
+0009 757CC0            5     MOV 7CH, #0C0H ;7-Display 0
+000C 757B08            6     MOV 7BH, #08H  ;7-Display Before CPL Buffer
+000F 757AF7            7     MOV 7AH, #0F7H ;7-Display Current Data
+0012 757500            8     MOV 75H, #00H  ;Time Controller
+0015 757400            9     MOV 74H, #00H  ;Cycle Times
+0018 757300           10     MOV 73H, #00H  ;Idx Controller
+                      11     
+001B                  12     MAIN:
+001B 757900           13             MOV 79H, #00H  ;7-Display Bit
+001E 757801           14             MOV 78H, #01H  ;Keyboard Before CPL Buffer
+0021 7577FE           15             MOV 77H, #0FEH  ;Keyboard Current Data
+0024 757600           16             MOV 76H, #00H  ;Keyboard IDX
+0027 112D             17             CALL DISPLAY
+0029 1151             18             CALL KEYBOARD
+002B 80EE             19             JMP MAIN
+                      20     
+002D                  21     DISPLAY:
+002D 90016E           22             MOV DPTR, #DISPLAY_CONTROL_TABLE
+0030 A879             23             MOV R0, 79H
+0032 E8               24             MOV A, R0
+0033 93               25             MOVC A, @A+DPTR
+0034 F8               26             MOV R0, A
+0035 8680             27             MOV P0, @R0
+0037 A87A             28             MOV R0, 7AH
+0039 88A0             29             MOV P2, R0
+003B 3165             30             CALL DELAY_500us
+003D 75A0FF           31             MOV P2, #0FFH
+0040 E57B             32             MOV A, 7BH
+0042 23               33             RL A
+0043 F57B             34             MOV 7BH, A
+0045 F4               35             CPL A
+0046 F57A             36             MOV 7AH, A
+0048 A879             37             MOV R0, 79H
+004A 08               38             INC R0
+004B 8879             39             MOV 79H, R0
+004D B804DD           40             CJNE R0, #04H, DISPLAY
+0050 22               41             RET
+                      42             
+0051                  43     KEYBOARD:
+0051 A876             44             MOV R0, 76H
+0053 A977             45             MOV R1, 77H
+0055 8990             46             MOV P1, R1
+0057 30941B           47             JNB P1.4, DECODE
+005A 08               48             INC R0
+005B 309517           49             JNB P1.5, DECODE
+005E 08               50             INC R0
+005F 309613           51             JNB P1.6, DECODE
+0062 08               52             INC R0
+0063 30970F           53             JNB P1.7, DECODE
+0066 08               54             INC R0
+0067 8876             55             MOV 76H, R0
+0069 E578             56             MOV A, 78H 
+006B 23               57             RL A
+A51 MACRO ASSEMBLER  MAIN                                                                 04/19/2023 21:21:04 PAGE     2
+
+006C F578             58             MOV 78H, A
+006E F4               59             CPL A
+006F F577             60             MOV 77H, A
+0071 B810DD           61             CJNE R0, #10H, KEYBOARD
+0074 22               62             RET
+                      63             
+0075                  64     DECODE:
+0075 11A0             65             CALL DELAY_1000us
+0077 11A0             66             CALL DELAY_1000us
+0079 11A0             67             CALL DELAY_1000us
+007B 11A0             68             CALL DELAY_1000us
+007D 11A0             69             CALL DELAY_1000us
+007F 8876             70             MOV 76H, R0
+0081 A973             71             MOV R1, 73H 
+0083 900172           72             MOV DPTR, #KEYCODE
+0086 E8               73             MOV A, R0
+0087 93               74             MOVC A, @A+DPTR
+0088 F8               75             MOV R0, A
+0089 90016E           76             MOV DPTR, #DISPLAY_CONTROL_TABLE
+008C E9               77             MOV A, R1
+008D 93               78             MOVC A, @A+DPTR
+008E F9               79             MOV R1, A
+008F E8               80             MOV A, R0
+0090 F7               81             MOV @R1, A
+0091 A873             82             MOV R0, 73H
+0093 08               83             INC R0
+0094 8873             84             MOV 73H, R0
+0096 B80404           85             CJNE R0, #04H, RETURN
+0099 757300           86             MOV 73H, #00H
+009C 22               87             RET
+                      88     
+009D                  89     RETURN:
+009D A876             90             MOV R0, 76H
+009F 22               91             RET
+                      92     
+00A0                  93     DELAY_1000us:
+00A0 AAFF             94             MOV R2, 0FFH
+00A2 DAFE             95             DJNZ R2, $
+00A4 AAFF             96             MOV R2, 0FFH
+00A6 DAFE             97             DJNZ R2, $
+00A8 AAFF             98             MOV R2, 0FFH
+00AA DAFE             99             DJNZ R2, $
+00AC AAFF            100             MOV R2, 0FFH
+00AE DAFE            101             DJNZ R2, $
+00B0 AAFF            102             MOV R2, 0FFH
+00B2 DAFE            103             DJNZ R2, $
+00B4 AAFF            104             MOV R2, 0FFH
+00B6 DAFE            105             DJNZ R2, $
+00B8 AAFF            106             MOV R2, 0FFH
+00BA DAFE            107             DJNZ R2, $
+00BC AAFF            108             MOV R2, 0FFH
+00BE DAFE            109             DJNZ R2, $
+00C0 AAFF            110             MOV R2, 0FFH
+00C2 DAFE            111             DJNZ R2, $
+00C4 AAFF            112             MOV R2, 0FFH
+00C6 DAFE            113             DJNZ R2, $
+00C8 AAFF            114             MOV R2, 0FFH
+00CA DAFE            115             DJNZ R2, $
+00CC AAFF            116             MOV R2, 0FFH
+00CE DAFE            117             DJNZ R2, $
+00D0 AAFF            118             MOV R2, 0FFH
+00D2 DAFE            119             DJNZ R2, $
+00D4 AAFF            120             MOV R2, 0FFH
+00D6 DAFE            121             DJNZ R2, $
+00D8 AAFF            122             MOV R2, 0FFH
+00DA DAFE            123             DJNZ R2, $
+A51 MACRO ASSEMBLER  MAIN                                                                 04/19/2023 21:21:04 PAGE     3
+
+00DC AAFF            124             MOV R2, 0FFH
+00DE DAFE            125             DJNZ R2, $
+00E0 AAFF            126             MOV R2, 0FFH
+00E2 DAFE            127             DJNZ R2, $
+00E4 AAFF            128             MOV R2, 0FFH
+00E6 DAFE            129             DJNZ R2, $
+00E8 AAFF            130             MOV R2, 0FFH
+00EA DAFE            131             DJNZ R2, $
+00EC AAFF            132             MOV R2, 0FFH
+00EE DAFE            133             DJNZ R2, $
+00F0 AAFF            134             MOV R2, 0FFH
+00F2 DAFE            135             DJNZ R2, $
+00F4 AAFF            136             MOV R2, 0FFH
+00F6 DAFE            137             DJNZ R2, $
+00F8 AAFF            138             MOV R2, 0FFH
+00FA DAFE            139             DJNZ R2, $
+00FC AAFF            140             MOV R2, 0FFH
+00FE DAFE            141             DJNZ R2, $
+0100 AAFF            142             MOV R2, 0FFH
+0102 DAFE            143             DJNZ R2, $
+0104 AAFF            144             MOV R2, 0FFH
+0106 DAFE            145             DJNZ R2, $
+0108 AAFF            146             MOV R2, 0FFH
+010A DAFE            147             DJNZ R2, $
+010C AAFF            148             MOV R2, 0FFH
+010E DAFE            149             DJNZ R2, $
+0110 AAFF            150             MOV R2, 0FFH
+0112 DAFE            151             DJNZ R2, $
+0114 AAFF            152             MOV R2, 0FFH
+0116 DAFE            153             DJNZ R2, $
+0118 AAFF            154             MOV R2, 0FFH
+011A DAFE            155             DJNZ R2, $
+011C AAFF            156             MOV R2, 0FFH
+011E DAFE            157             DJNZ R2, $
+0120 AAFF            158             MOV R2, 0FFH
+0122 DAFE            159             DJNZ R2, $
+0124 AAFF            160             MOV R2, 0FFH
+0126 DAFE            161             DJNZ R2, $
+0128 AAFF            162             MOV R2, 0FFH
+012A DAFE            163             DJNZ R2, $
+012C AAFF            164             MOV R2, 0FFH
+012E DAFE            165             DJNZ R2, $
+0130 AAFF            166             MOV R2, 0FFH
+0132 DAFE            167             DJNZ R2, $
+0134 AAFF            168             MOV R2, 0FFH
+0136 DAFE            169             DJNZ R2, $
+0138 AAFF            170             MOV R2, 0FFH
+013A DAFE            171             DJNZ R2, $
+013C AAFF            172             MOV R2, 0FFH
+013E DAFE            173             DJNZ R2, $
+0140 AAFF            174             MOV R2, 0FFH
+0142 DAFE            175             DJNZ R2, $
+0144 AAFF            176             MOV R2, 0FFH
+0146 DAFE            177             DJNZ R2, $
+0148 AAFF            178             MOV R2, 0FFH
+014A DAFE            179             DJNZ R2, $
+014C AAFF            180             MOV R2, 0FFH
+014E DAFE            181             DJNZ R2, $
+0150 AAFF            182             MOV R2, 0FFH
+0152 DAFE            183             DJNZ R2, $
+0154 AAFF            184             MOV R2, 0FFH
+0156 DAFE            185             DJNZ R2, $
+0158 AAFF            186             MOV R2, 0FFH
+015A DAFE            187             DJNZ R2, $
+015C AAFF            188             MOV R2, 0FFH
+015E DAFE            189             DJNZ R2, $
+A51 MACRO ASSEMBLER  MAIN                                                                 04/19/2023 21:21:04 PAGE     4
+
+0160 22              190             RET
+                     191     
+0161                 192     DELAY_25us:
+0161 AAFF            193             MOV R2, 0FFH
+0163 DAFE            194             DJNZ R2, $
+                     195     
+0165                 196     DELAY_500us:
+0165 AAFF            197             MOV R2, 0FFH
+0167 DAFE            198             DJNZ R2, $
+0169 AAFF            199             MOV R2, 0FFH
+016B DAFE            200             DJNZ R2, $
+016D 22              201             RET
+                     202     
+016E                 203     DISPLAY_CONTROL_TABLE:
+016E 7F              204             DB 7FH
+016F 7E              205             DB 7EH
+0170 7D              206             DB 7DH
+0171 7C              207             DB 7CH
+                     208             
+0172                 209     KEYCODE:
+0172 C0              210             DB 0C0H
+0173 C6              211             DB 0C6H
+0174 80              212             DB      80H
+0175 88              213             DB  88H
+0176 FF              214             DB 0FFH
+0177 90              215             DB  90H
+0178 82              216             DB  82H
+0179 B0              217             DB 0B0H
+017A C0              218             DB 0C0H
+017B 80              219             DB  80H
+017C 92              220             DB  92H
+017D A4              221             DB 0A4H
+017E FF              222             DB 0FFH
+017F F8              223             DB 0F8H
+0180 99              224             DB  99H
+0181 F9              225             DB 0F9H
+                     226     END
+A51 MACRO ASSEMBLER  MAIN                                                                 04/19/2023 21:21:04 PAGE     5
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                T Y P E  V A L U E   ATTRIBUTES
+
+DECODE. . . . . . . .  C ADDR   0075H   A   
+DELAY_1000US. . . . .  C ADDR   00A0H   A   
+DELAY_25US. . . . . .  C ADDR   0161H   A   
+DELAY_500US . . . . .  C ADDR   0165H   A   
+DISPLAY . . . . . . .  C ADDR   002DH   A   
+DISPLAY_CONTROL_TABLE  C ADDR   016EH   A   
+KEYBOARD. . . . . . .  C ADDR   0051H   A   
+KEYCODE . . . . . . .  C ADDR   0172H   A   
+MAIN. . . . . . . . .  C ADDR   001BH   A   
+P0. . . . . . . . . .  D ADDR   0080H   A   
+P1. . . . . . . . . .  D ADDR   0090H   A   
+P2. . . . . . . . . .  D ADDR   00A0H   A   
+RETURN. . . . . . . .  C ADDR   009DH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

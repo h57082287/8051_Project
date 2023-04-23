@@ -1,0 +1,126 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 04/09/2023 23:01:02 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000 757DFF            2     MOV 7DH, #0FFH  ; 7-Display Status
+0003                   3     MAIN:   
+0003 757FFE            4             MOV 7FH, #0FEH  ; Current Status
+0006 757E01            5             MOV 7EH, #01H   ; CPL Status
+0009 757CFF            6             MOV 7CH, #0FFH  ; Time Buffer
+000C 7900              7             MOV R1,  #00H   ; Table Index
+000E 900069            8             MOV DPTR, #DIGITAL
+0011                   9     LOOP:   
+0011 1149             10             CALL DISPLAY
+0013 1117             11             CALL KEYDECODE
+0015 80EC             12             JMP MAIN
+                      13             
+                      14     
+0017                  15     KEYDECODE:
+0017 A87F             16             MOV R0, 7FH
+0019 8890             17             MOV P1, R0
+001B 309424           18             JNB P1.4, SET_DISPLAY
+001E 09               19             INC R1
+001F 1158             20             CALL DELAY_250u
+0021 30951E           21             JNB P1.5, SET_DISPLAY
+0024 09               22             INC R1
+0025 1158             23             CALL DELAY_250u
+0027 309618           24             JNB P1.6, SET_DISPLAY
+002A 09               25             INC R1
+002B 1158             26             CALL DELAY_250u
+002D 309712           27             JNB P1.7, SET_DISPLAY
+0030 09               28             INC R1
+0031 1158             29             CALL DELAY_250u
+0033 1139             30             CALL NEXT
+0035 B910DF           31             CJNE R1, #10H, KEYDECODE
+0038 22               32             RET
+                      33             
+0039                  34     NEXT:
+0039 E57E             35             MOV A, 7EH
+003B 23               36             RL A
+003C F57E             37             MOV 7EH, A
+003E F4               38             CPL A
+003F F57F             39             MOV 7FH, A
+0041 22               40             RET
+                      41     
+0042                  42     SET_DISPLAY:
+0042 E9               43             MOV A, R1
+0043 93               44             MOVC A, @A+DPTR
+0044 F57D             45             MOV 7DH, A
+0046 1149             46             CALL DISPLAY
+0048 22               47             RET
+                      48             
+0049                  49     DISPLAY:
+0049 A87D             50             MOV R0, 7DH
+004B 8880             51             MOV P0, R0
+004D C2A3             52             CLR P2.3
+004F A87C             53             MOV R0, 7CH
+0051 18               54             DEC R0
+0052 887C             55             MOV 7CH, R0
+0054 B800F2           56             CJNE R0, #00H, DISPLAY
+0057 22               57             RET
+A51 MACRO ASSEMBLER  MAIN                                                                 04/09/2023 23:01:02 PAGE     2
+
+                      58     
+0058                  59     DELAY_250u:
+0058 78FF             60             MOV R0, #0FFH
+005A D8FE             61             DJNZ R0, $
+005C 78FF             62             MOV R0, #0FFH
+005E D8FE             63             DJNZ R0, $
+0060 78FF             64             MOV R0, #0FFH
+0062 D8FE             65             DJNZ R0, $
+0064 78FF             66             MOV R0, #0FFH
+0066 D8FE             67             DJNZ R0, $
+0068 22               68             RET
+                      69     
+0069                  70     DIGITAL:
+0069 C0               71             DB 0C0H
+006A C6               72             DB 0C6H
+006B 80               73             DB      80H
+006C 88               74             DB  88H
+006D FF               75             DB 0FFH
+006E 90               76             DB  90H
+006F 82               77             DB  82H
+0070 B0               78             DB 0B0H
+0071 C0               79             DB 0C0H
+0072 80               80             DB  80H
+0073 92               81             DB  92H
+0074 A4               82             DB 0A4H
+0075 FF               83             DB 0FFH
+0076 F8               84             DB 0F8H
+0077 99               85             DB  99H
+0078 F9               86             DB 0F9H
+                      87             
+                      88                     
+                      89     END
+A51 MACRO ASSEMBLER  MAIN                                                                 04/09/2023 23:01:02 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY_250U . . . .  C ADDR   0058H   A   
+DIGITAL. . . . . .  C ADDR   0069H   A   
+DISPLAY. . . . . .  C ADDR   0049H   A   
+KEYDECODE. . . . .  C ADDR   0017H   A   
+LOOP . . . . . . .  C ADDR   0011H   A   
+MAIN . . . . . . .  C ADDR   0003H   A   
+NEXT . . . . . . .  C ADDR   0039H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+SET_DISPLAY. . . .  C ADDR   0042H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

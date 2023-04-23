@@ -1,0 +1,80 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 03/28/2023 23:20:48 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000                   2     MAIN:
+0000 C2A3              3             CLR P2.3
+0002 7809              4             MOV R0, #09H
+0004 900015            5             MOV DPTR, #TABLE
+0007                   6     LOOP:
+0007 7AFF              7             MOV R2, #0FFH
+0009 E8                8             MOV A, R0
+000A 93                9             MOVC A, @A+DPTR
+000B F580             10             MOV P0, A
+000D 111F             11             CALL DELAY
+000F 18               12             DEC R0
+0010 B800F4           13             CJNE R0, #00H, LOOP
+0013 80EB             14             JMP MAIN
+                      15             
+0015                  16     TABLE:
+                      17             ; G F E D C B A
+                      18             ; 1 0 0 0 0 0 0 0
+                      19             ; 1 1 1 1 0 0 1 1
+                      20             ; 0 1 0 0 1 0 0 2
+                      21             ; 0 1 1 0 0 0 0 3
+                      22             ; 0 0 1 1 0 0 1 4
+                      23             ; 0 0 1 0 0 1 0 5
+                      24             ; 0 0 0 0 0 1 1 6
+                      25             ; 1 1 1 1 0 0 0 7
+                      26             ; 0 0 0 0 0 0 0 8
+                      27             ; 0 0 1 0 0 0 0 9
+0015 C0               28             DB 0C0H ; 0
+0016 F9               29             DB 0F9H ; 1
+0017 A4               30             DB 0A4H ; 2
+0018 B0               31             DB 0B0H ; 3
+0019 99               32             DB 99H  ; 4
+001A 92               33             DB 92H  ; 5
+001B 83               34             DB 83H  ; 6
+001C F8               35             DB 0F8H ; 7
+001D 80               36             DB 80H  ; 8
+001E 90               37             DB 090H ; 9
+                      38     
+001F                  39     DELAY:
+001F 79FF             40             MOV R1, #0FFH
+0021 D9FE             41             DJNZ R1, $
+0023 79FF             42             MOV R1, #0FFH
+0025 D9FE             43             DJNZ R1, $
+0027 79FF             44             MOV R1, #0FFH
+0029 D9FE             45             DJNZ R1, $
+002B 79FF             46             MOV R1, #0FFH
+002D D9FE             47             DJNZ R1, $
+002F DAEE             48             DJNZ R2, DELAY
+0031 22               49             RET
+                      50     END
+A51 MACRO ASSEMBLER  MAIN                                                                 03/28/2023 23:20:48 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   001FH   A   
+LOOP . . . . . . .  C ADDR   0007H   A   
+MAIN . . . . . . .  C ADDR   0000H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+TABLE. . . . . . .  C ADDR   0015H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

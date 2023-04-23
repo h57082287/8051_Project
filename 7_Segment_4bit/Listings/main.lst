@@ -1,0 +1,137 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 03/29/2023 23:28:17 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\main.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE main.a51 SET(SMALL) DEBUG PRINT(.\Listings\main.lst) OBJECT(.\Objects\m
+                      ain.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000                   2     MAIN:
+0000 78EF              3             MOV R0, #0EFH
+0002 7A00              4             MOV R2, #00H
+0004 7B00              5             MOV R3, #00H
+0006 7C00              6             MOV R4, #00H
+0008 7D00              7             MOV R5, #00H
+000A 7EFF              8             MOV R6, #0FFH
+000C 75A0FF            9             MOV P2, #0FFH
+000F 900076           10             MOV DPTR, #TABLE
+0012                  11     LOOP:
+0012 EA               12             MOV A, R2
+0013 93               13             MOVC A, @A+DPTR
+0014 F580             14             MOV P0, A
+0016 E8               15             MOV A, R0
+0017 03               16             RR A
+0018 F5A0             17             MOV P2, A
+001A F8               18             MOV R0, A
+001B 1180             19             CALL DELAY_0005S
+001D 75A0FF           20             MOV P2, #0FFH
+                      21             
+0020 EB               22             MOV A, R3
+0021 93               23             MOVC A, @A+DPTR
+0022 F580             24             MOV P0, A
+0024 E8               25             MOV A, R0
+0025 03               26             RR A
+0026 F5A0             27             MOV P2, A
+0028 F8               28             MOV R0, A
+0029 1180             29             CALL DELAY_0005S
+002B 75A0FF           30             MOV P2, #0FFH
+                      31             
+002E EC               32             MOV A, R4
+002F 93               33             MOVC A, @A+DPTR
+0030 F580             34             MOV P0, A
+0032 E8               35             MOV A, R0
+0033 03               36             RR A
+0034 F5A0             37             MOV P2, A
+0036 F8               38             MOV R0, A
+0037 1180             39             CALL DELAY_0005S
+0039 75A0FF           40             MOV P2, #0FFH
+                      41             
+003C ED               42             MOV A, R5
+003D 93               43             MOVC A, @A+DPTR
+003E F580             44             MOV P0, A
+0040 E8               45             MOV A, R0
+0041 03               46             RR A
+0042 F5A0             47             MOV P2, A
+0044 F8               48             MOV R0, A
+0045 1180             49             CALL DELAY_0005S
+0047 75A0FF           50             MOV P2, #0FFH
+                      51             
+                      52             ; Time Control
+004A 1E               53             DEC R6
+004B BE00C4           54             CJNE R6, #00H, LOOP
+                      55             
+004E 78EF             56             MOV R0, #0EFH
+0050 0A               57             INC R2
+A51 MACRO ASSEMBLER  MAIN                                                                 03/29/2023 23:28:17 PAGE     2
+
+0051 BA0ABE           58             CJNE R2, #0AH, LOOP
+0054 7A00             59             MOV R2, #00H
+0056 0B               60             INC R3
+0057 BB0AB8           61             CJNE R3, #0AH, LOOP
+005A 7A00             62             MOV R2, #00H
+005C 7B00             63             MOV R3, #00H
+005E 0C               64             INC R4
+005F BC0AB0           65             CJNE R4, #0AH, LOOP
+0062 7A00             66             MOV R2, #00H
+0064 7B00             67             MOV R3, #00H
+0066 7C00             68             MOV R4, #00H
+0068 0D               69             INC R5
+0069 BD0AA6           70             CJNE R5, #0AH, LOOP
+006C 7A00             71             MOV R2, #00H
+006E 7B00             72             MOV R3, #00H
+0070 7C00             73             MOV R4, #00H
+0072 7D00             74             MOV R5, #00H
+0074 808A             75             JMP MAIN
+                      76             
+0076                  77     TABLE:
+                      78             ; G F E D C B A
+                      79             ; 1 0 0 0 0 0 0 0
+                      80             ; 1 1 1 1 0 0 1 1
+                      81             ; 0 1 0 0 1 0 0 2
+                      82             ; 0 1 1 0 0 0 0 3
+                      83             ; 0 0 1 1 0 0 1 4
+                      84             ; 0 0 1 0 0 1 0 5
+                      85             ; 0 0 0 0 0 1 1 6
+                      86             ; 1 1 1 1 0 0 0 7
+                      87             ; 0 0 0 0 0 0 0 8
+                      88             ; 0 0 1 0 0 0 0 9
+0076 C0               89             DB 0C0H ; 0
+0077 F9               90             DB 0F9H ; 1
+0078 A4               91             DB 0A4H ; 2
+0079 B0               92             DB 0B0H ; 3
+007A 99               93             DB 99H  ; 4
+007B 92               94             DB 92H  ; 5
+007C 83               95             DB 83H  ; 6
+007D F8               96             DB 0F8H ; 7
+007E 80               97             DB 80H  ; 8
+007F 90               98             DB 090H ; 9
+                      99     
+0080                 100     DELAY_0005S:
+0080 79FF            101             MOV R1, #0FFH
+0082 D9FE            102             DJNZ R1, $
+0084 22              103             RET
+                     104     
+                     105     END
+A51 MACRO ASSEMBLER  MAIN                                                                 03/29/2023 23:28:17 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY_0005S. . . .  C ADDR   0080H   A   
+LOOP . . . . . . .  C ADDR   0012H   A   
+MAIN . . . . . . .  C ADDR   0000H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+TABLE. . . . . . .  C ADDR   0076H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
